@@ -56,7 +56,7 @@ pipeline {
 				script {
 					dir ("app") {
 
-							 sh "npm run deploy"		
+							 sh "CI=false npm run deploy"		
 					}	
 				}
 			}
