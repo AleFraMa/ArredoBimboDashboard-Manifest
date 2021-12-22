@@ -7,7 +7,7 @@ pipeline {
     }
 	
 	environment {
-		GITLAB_APP_URL = "https://github.com/Manuel-1996/ArredoBimboE-Commerce.git" 
+		GITLAB_APP_URL = "https://github.com/ArredoBimbo/Dashboard.git" 
 
 		GITLAB_CRED = "utenza-tecnica-github"
 		GITHUB_MANU='github-manuel-personale'
@@ -20,11 +20,7 @@ pipeline {
 
 		stage('Git Pull') {
 
-		 	when {
-            	expression {
-                    return !params.testonlydeploy;
-                }
-        	}
+
 			steps {
 				dir("app") {
 					script {
@@ -36,100 +32,36 @@ pipeline {
 
 		stage('Install Dependacy') {
 			
-			when {
 
-            	expression {
-                    return !params.testonlydeploy;
-                }
-        	}
 
 			steps {
 				dir("app"){
 					script {
-						sh "echo \"export const IP = 'https://arredobimbo.com:8443';\" > ./src/configs/IPConfig.js"
-						sh 'cat ./src/configs/IPConfig.js'
+						sh "echo \"export const IP = 'https://arredobimbo.com:8443';\" > ./src/configs/IP.js"
+						sh 'cat ./src/configs/IP.js'
 						sh "npm install --force"
 					}
 				}
 			}
 		}
 		
-		stage('Build Application') {
 
-			when {
-            	expression {
-                    return !params.testonlydeploy;
-                }
-        	}
 
-			steps {
-				dir("app") {
-					script {
-						sh "echo build"
-						sh "CI=false npm run build"
-					}
-				}
-			}
-		}
 
-		stage('Remove Old site') {
-			
-			when {
-            	expression {
-                    return !params.testonlydeploy;
-                }
-        	}
-			steps {
-				dir("app") {
-					script {
-						sh "echo dafare"
-					}
-				}
-			}
-		}
 
-		stage('Deploy On server Alibaba') {
-			when {
-           	 	expression {
-                    return !params.testonlydeploy;
-                }
-        	}
+		stage('Deploy On server GIT') {
+
 			steps {
 				script {
 					dir ("app") {
 
-							 withCredentials([string(credentialsId: "password-ssh-arredobimbo-server", variable: 'password')]) {
-
-       								sh "sshpass -p \"${password}\" scp -o StrictHostKeyChecking=no -r ./build/* root@arredobimbo.com:/usr/share/nginx/html"
-        
-   							}		
+							 sh "npm run deploy"		
 					}	
 				}
 			}
 		}
 
-		stage('TEST ONLY DEPLOY') {
-			when {
-            	expression {
-                    return params.testonlydeploy;
-                }
-        	}
-			steps {
-				script {
-					dir ("app") {
-						
-							sh "echo prova>> prova.txt"
-							 withCredentials([string(credentialsId: "password-ssh-arredobimbo-server", variable: 'password')]) {
 
-       								sh "sshpass -p \"${password}\" scp -o StrictHostKeyChecking=no ./prova.txt root@arredobimbo.com:/root"
-        
-   								}
-								   
-							
-					}	
-				}
-			}
-		}
 		
 	
 	
