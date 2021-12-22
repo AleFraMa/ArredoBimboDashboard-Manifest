@@ -37,9 +37,10 @@ pipeline {
 			steps {
 				dir("app"){
 					script {
+						sh "ls"
 						sh "echo \"export const IP = 'https://arredobimbo.com:8443';\" > ./src/configs/IP.js"
 						sh 'cat ./src/configs/IP.js'
-						sh "npm install --force"
+						sh "npm install"
 					}
 				}
 			}
