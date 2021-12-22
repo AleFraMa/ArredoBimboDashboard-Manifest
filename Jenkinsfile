@@ -24,7 +24,7 @@ pipeline {
 			steps {
 				dir("app") {
 					script {
-						git url: "${GITLAB_APP_URL}",credentialsId: "${GITHUB_MANU}"
+						git url: "${GITLAB_APP_URL}",credentialsId: "${GITHUB_MANU}",branch:"main"
 				}
 			}
 			}
