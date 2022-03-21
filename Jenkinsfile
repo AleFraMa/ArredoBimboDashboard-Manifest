@@ -52,7 +52,7 @@ pipeline {
 			steps {
 				script {
 					dir ("app") {
-
+							git config --global user.email "mperna.96@gmail.com"
 							 sh "CI=false npm run deploy"		
 					}	
 				}
