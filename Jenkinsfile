@@ -1,10 +1,7 @@
 pipeline {
 	agent any
 	
-	parameters {
-        booleanParam(name: 'testonlydeploy', defaultValue: false, description: 'True if you want test only deploy on service with test file')
-
-    }
+	
 	
 	environment {
 		GITLAB_APP_URL = "https://github.com/ArredoBimbo/Dashboard.git" 
