@@ -52,7 +52,7 @@ pipeline {
 			steps {
 				script {
 					dir ("app") {
-						sh "ls -ltrah"
+						sh "ls -ltrah ./.git"
 						sh "cat ./.git/configs"
 							//sh "git config user.email \"mperna.96@gmail.com\""
 							//sh "git config --global user.name \"Manuel Perna\""	 
