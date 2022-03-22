@@ -37,7 +37,7 @@ pipeline {
 						sh "ls"
 						sh "echo \"export const IP = 'https://arredobimbo.com:8443';\" > ./src/configs/IP.js"
 						sh 'cat ./src/configs/IP.js'
-						//sh "npm install"
+						sh "npm install"
 					}
 				}
 			}
@@ -55,8 +55,9 @@ pipeline {
 						sh "ls -ltrah ./.git"
 						sh "cat ./.git/config"
 							//sh "git config user.email \"mperna.96@gmail.com\""
-							//sh "git config --global user.name \"Manuel Perna\""	 
-							//sh "CI=false npm run deploy"		
+							//sh "git config --global user.name \"Manuel Perna\""
+						sh "git config --global credential.helper store"
+							sh "CI=false npm run deploy"		
 					}	
 				}
 			}
