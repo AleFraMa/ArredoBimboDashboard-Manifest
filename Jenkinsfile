@@ -53,7 +53,7 @@ pipeline {
 				script {
 					dir ("app") {
 							sh "git config user.email \"mperna.96@gmail.com\""
-							sh "git config --global user.name \"Il tuo nome\""	 
+							sh "git config --global user.name \"Manuel Perna\""	 
 							sh "CI=false npm run deploy"		
 					}	
 				}
