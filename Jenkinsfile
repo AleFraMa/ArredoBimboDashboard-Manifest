@@ -37,7 +37,7 @@ pipeline {
 						sh "ls"
 						sh "echo \"export const IP = 'https://arredobimbo.com:8443';\" > ./src/configs/IP.js"
 						sh 'cat ./src/configs/IP.js'
-						sh "npm install"
+						//sh "npm install"
 					}
 				}
 			}
