@@ -1,0 +1,125 @@
+pipeline {
+	agent any
+	
+	parameters {
+        booleanParam(name: 'testonlydeploy', defaultValue: false, description: 'True if you want test only deploy on service with test file')
+
+    }
+	
+	environment {
+		GITLAB_APP_URL = "https://github.com/ArredoBimbo/Dashboard.git" 
+
+		GITLAB_CRED = "utenza-tecnica-github"
+		GITHUB_MANU='github-manuel-personale'
+		
+	}
+	
+
+	stages {
+
+
+		stage('Git Pull') {
+
+		 	when {
+            	expression {
+                    return !params.testonlydeploy;
+                }
+        	}
+			steps {
+				dir("app") {
+					script {
+						git url: "${GITLAB_APP_URL}",credentialsId: "${GITHUB_MANU}"
+						pkgJSON = readJSON file: 'package.json'
+						
+						
+				}
+			}
+			}
+		}
+
+		stage('Install Dependacy') {
+			
+			when {
+
+            	expression {
+                    return !params.testonlydeploy;
+                }
+        	}
+
+			steps {
+				dir("app"){
+					script {
+						sh "echo \"export const IP = 'https://studio-manudaniel.ddns.net:8443';\" > ./src/configs/IP.js"
+						sh 'cat ./src/configs/IPConfig.js'
+						sh "npm install --force"
+					}
+				}
+			}
+		}
+		
+		stage('Build Application') {
+
+			when {
+            	expression {
+                    return !params.testonlydeploy;
+                }
+        	}
+
+			steps {
+				dir("app") {
+					script {
+						sh "echo build"
+						sh "CI=false npm run build"
+					}
+				}
+			}
+		}
+
+		stage('Remove Old site') {
+			
+			when {
+            	expression {
+                    return !params.testonlydeploy;
+                }
+        	}
+			steps {
+				dir("app") {
+					script {
+						sh "echo dafare"
+					}
+				}
+			}
+		}
+
+		stage('Deploy On server Manuel') {
+			when {
+           	 	expression {
+                    return !params.testonlydeploy;
+                }
+        	}
+			steps {
+				script {
+					dir ("app") {
+
+							 withCredentials([string(credentialsId: "password-ssh-arredobimbo-server", variable: 'password')]) {
+								 sh "sudo cp -r ./build/* /usr/share/nginx/html/Dashboard"
+       								 //sh "sudo cp -r ./build/* /usr/share/nginx/html/arredobimbo"
+								 //sh "sudo cp -r yarn.lock /usr/share/nginx/html/arredobimbo"
+        
+   							}		
+					}	
+				}
+			}
+		}
+	
+	
+		
+}
+
+	post {	
+		always {
+			deleteDir()
+		}
+	}
+
+}
