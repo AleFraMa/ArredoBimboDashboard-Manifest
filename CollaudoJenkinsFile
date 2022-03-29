@@ -50,7 +50,7 @@ pipeline {
 				dir("app"){
 					script {
 						sh "echo \"export const IP = 'https://studio-manudaniel.ddns.net:8443';\" > ./src/configs/IP.js"
-						sh 'cat ./src/configs/IPConfig.js'
+						sh 'cat ./src/configs/IP.js'
 						sh "npm install --force"
 					}
 				}
